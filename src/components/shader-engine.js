@@ -1,5 +1,5 @@
 // Your existing lime scheme (4 stops, cyclic)
-export const DEFAULT_PALETTE = ["#d8ff2a", "#a9d600", "#0a0a0a"];
+export const DEFAULT_PALETTE = ["#d4ff1f", "#b8f000", "#1f1f1f"];
 
 const TAU = 0.35; // seconds: how quickly the pause/resume eases
 
@@ -22,6 +22,7 @@ uniform float u_phase;
 uniform float u_speed;
 uniform float u_glitch;
 uniform float u_grain;
+uniform vec2 u_res; 
 uniform vec3 u_c0;
 uniform vec3 u_c1;
 uniform vec3 u_c2;
@@ -31,19 +32,45 @@ float hash(vec2 p) {
 }
 
 // x,y in 0..1 (x may be offset by glitch), n = static per-pixel noise
-vec3 field(float x, float y, float center, float n) {
-  // dark amount: 0 on the left, 1 on the right, boundary drifts with 'center'
-  float t = smoothstep(center - 0.42, center + 0.42, x + (y - 0.5) * 0.18);
+float vnoise(vec2 p) {
+  vec2 i = floor(p);
+  vec2 f = fract(p);
+  f = f * f * (3.0 - 2.0 * f);
+  float a = hash(i);
+  float b = hash(i + vec2(1.0, 0.0));
+  float c = hash(i + vec2(0.0, 1.0));
+  float d = hash(i + vec2(1.0, 1.0));
+  return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+}
+vec3 field(vec2 uv, float w, float n) {
+  float aspect = u_res.x / u_res.y;
+  vec2 p = (uv - 0.5) * vec2(aspect, 1.0);
 
-  // lime side: brighter glow toward the top-left
-  float glow = smoothstep(0.0, 1.0, (1.0 - y) * 0.6 + (1.0 - x) * 0.5);
+  // organic wobble: noise sampled on a bounded loop, so it never drifts to huge values
+  float warp = (vnoise(p * 2.2 + vec2(sin(w), cos(w * 0.8)) * 1.2) - 0.5) * 0.6;
+
+  // diagonal coordinate the blob travels along
+  float s = p.x + p.y * 0.45 + warp;
+
+  // blob center sweeps right <-> left, and its width breathes
+  float c = sin(w) * aspect * 0.42;
+  float width = 0.8 + 0.25 * sin(w * 1.7 + 1.0);
+
+  // 1 in the core, 0 outside, soft edge
+  float d = 1.0 - smoothstep(width * 0.25, width, abs(s - c));
+
+  // lime side: gentle glow variation + fine speckle
+  float glow = smoothstep(0.0, 1.0, (1.0 - uv.y) * 0.6 + (1.0 - uv.x) * 0.4);
   vec3 lime = mix(u_c1, u_c0, glow);
+  float n2 = hash(floor(gl_FragCoord.xy) + 31.7);
+  lime += (n2 - 0.5) * 0.10 * u_grain;                       // grain
+  lime += 0.16 * step(0.94, n2) * (1.0 - d) * u_grain;       // bright speckle
 
-  // dithering: strongest mid-transition, fades out at both ends
-  float mid = clamp(4.0 * t * (1.0 - t) * 1.4, 0.0, 1.0);
-  float td = mix(t, step(n, t), mid * u_grain);
+  // dithered edge: strongest where the blob fades out
+  float mid = clamp(4.0 * d * (1.0 - d) * 1.4, 0.0, 1.0);
+  float dd = mix(d, step(n, d), mid * u_grain);
 
-  return mix(lime, u_c2, td);
+  return mix(lime, u_c2, dd);
 }
 
 void main() {
@@ -63,16 +90,15 @@ void main() {
     split = 0.03 * burst;
   }
 
-  // slow drifting boundary (uses accumulated phase, so hover freezes it smoothly)
+  // one full back-and-forth per cycle; hover freezes it because phase stops accumulating
   float w = u_phase * u_speed * 6.2831853;
-  float center = 0.58 + 0.13 * sin(w) + 0.04 * sin(w * 2.3 + 1.0);
 
   float n = hash(floor(gl_FragCoord.xy));
 
   vec3 col = vec3(
-    field(uv.x - split, uv.y, center, n).r,
-    field(uv.x, uv.y, center, n).g,
-    field(uv.x + split, uv.y, center, n).b
+    field(vec2(uv.x - split, uv.y), w, n).r,
+    field(uv, w, n).g,
+    field(vec2(uv.x + split, uv.y), w, n).b
   );
   col = mix(col, vec3(1.0), 0.25 * step(0.85, rh) * burst);
   col *= 1.0 - 0.08 * burst * step(0.5, fract(gl_FragCoord.y * 0.5));
@@ -92,7 +118,7 @@ let locs = {};
 let raf = 0;
 let last = 0;
 
-const UNIFORMS = ["u_phase", "u_speed", "u_glitch", "u_grain", "u_c0", "u_c1", "u_c2"];
+const UNIFORMS = ["u_phase", "u_speed", "u_glitch", "u_grain", "u_res", "u_c0", "u_c1", "u_c2"];
 
 function hexToRgb(hex) {
   let h = hex.replace("#", "");
@@ -200,7 +226,9 @@ function draw(i) {
     glCanvas.width = Math.max(glCanvas.width, i.w); // grow-only: avoids realloc thrash
     glCanvas.height = Math.max(glCanvas.height, i.h);
   }
+ // gl.viewport(0, 0, i.w, i.h);
   gl.viewport(0, 0, i.w, i.h);
+  gl.uniform2f(locs.u_res, i.w, i.h);
    const [c0, c1, c2] = i.opts.colors.map(hexToRgb);
   gl.uniform1f(locs.u_phase, i.phase);
   gl.uniform1f(locs.u_speed, i.opts.speed);

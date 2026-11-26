@@ -88,7 +88,7 @@ export default function ShaderNavButton({
         }
       }}
       onBlur={() => handleRef.current && handleRef.current.setHover(false)}
-      className={`group relative isolate shrink-0 overflow-hidden whitespace-nowrap font-semibold text-white ${FALLBACK_GRADIENT} border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_8px_24px_-10px_rgba(190,235,0,0.5)] transition-transform duration-150 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c9f21a] ${className}`}
+      className={`group relative isolate shrink-0 overflow-hidden whitespace-nowrap font-semibold text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.35)] ${FALLBACK_GRADIENT} border border-white/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_8px_24px_-10px_rgba(190,235,0,0.5)] transition-transform duration-150 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c9f21a] ${className}`}
     >
       <canvas
         ref={canvasRef}

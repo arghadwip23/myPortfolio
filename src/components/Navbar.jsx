@@ -245,7 +245,8 @@ export default function Navbar() {
           {/* Desktop CTA */}
           <ShaderNavButton
             href={CTA.href}
-            speed={0.5}
+            speed={0.12}
+            glitch={0} grain={0.9}
             className="hidden items-center rounded-full px-5 py-2.5 text-sm lg:inline-flex xl:px-7 xl:py-3.5"
           >
             {CTA.label}

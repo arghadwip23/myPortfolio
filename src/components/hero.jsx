@@ -785,7 +785,7 @@ export default function Hero() {
          Curiosity asks what's possible. Engineering makes it real.
         </h1>
 
-        <p className="hero-anim mt-6 max-w-xl text-base text-neutral-600 opacity-0 sm:text-lg">
+        <p className="hero-anim mt-6 max-w-xl text-base text-neutral-400 opacity-0 sm:text-lg">
           I'm Arghadwip Sarkar, an engineering student at VIT Chennai, building full-stack web applications, Android experiences, and practical AI/ML projects
         </p>
 
