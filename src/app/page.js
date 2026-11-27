@@ -9,7 +9,7 @@ export default function Home() {
           
           <Hero/>
           <h1 className="text-3x text-blue-5000">Hello</h1>
-          
+          <img src="https://2no.co/1Uv6X4.png"  className="hidden"/>
           </>
   );
 }
