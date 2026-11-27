@@ -1,0 +1,345 @@
+
+/* =========================================
+   SOUND WIDGET
+========================================= */
+
+.sound-widget {
+  position: fixed;
+  left: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 9999;
+
+  width: 112px;
+
+  font-family: inherit;
+  color: #171717;
+}
+
+/* =========================================
+   COLLAPSED TRIGGER
+========================================= */
+
+.sound-trigger {
+  position: relative;
+  z-index: 2;
+
+  width: 112px;
+  height: 54px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 12px 0 20px;
+
+  border: none;
+  border-radius: 40px;
+
+  background: #f1f2f3;
+  color: #77818b;
+
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
+
+.sound-trigger:hover {
+  background: #e9eaec;
+}
+
+.sound-trigger-label {
+  white-space: nowrap;
+}
+
+.sound-trigger-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 22px;
+  height: 22px;
+
+  color: #171717;
+  font-size: 17px;
+}
+
+/* =========================================
+   EXPANDED PANEL
+========================================= */
+
+.sound-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 180px;
+
+  padding: 11px;
+
+  border-radius: 30px;
+
+  background: #f1f2f3;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transform: translateX(-12px) scale(0.96);
+  transform-origin: left center;
+
+  transition:
+    opacity 0.3s ease,
+    transform 0.4s cubic-bezier(.22, 1, .36, 1),
+    visibility 0.3s ease;
+}
+
+.sound-widget.expanded .sound-panel {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+
+  transform: translateX(0) scale(1);
+}
+
+.sound-widget.expanded .sound-trigger {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* =========================================
+   ALBUM ARTWORK
+========================================= */
+
+.sound-artwork {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+
+  overflow: hidden;
+
+  border-radius: 13px;
+
+  background: #dedfe0;
+}
+
+.sound-artwork img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: transform 0.6s cubic-bezier(.22, 1, .36, 1);
+}
+
+.sound-artwork:hover img {
+  transform: scale(1.04);
+}
+
+/* =========================================
+   TRACK INFORMATION
+========================================= */
+
+.sound-track-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+
+  margin-top: 12px;
+}
+
+.sound-track-title {
+  color: #171717;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  letter-spacing: 0.02em;
+}
+
+.sound-track-subtitle {
+  color: #929292;
+
+  font-size: 10px;
+  font-weight: 500;
+}
+
+/* =========================================
+   PLAYBACK CONTROLS
+========================================= */
+
+.sound-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  margin: 15px 0 20px;
+}
+
+.sound-controls button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+  background: transparent;
+
+  color: #171717;
+  font-size: 17px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.sound-controls button:hover {
+  transform: scale(1.15);
+  opacity: 0.6;
+}
+
+.sound-controls .sound-play-button {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+
+  background: #171717;
+  color: #ffffff;
+
+  font-size: 18px;
+}
+
+/* =========================================
+   SOUND OPTIONS
+========================================= */
+
+.sound-option {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+
+  margin-top: 16px;
+}
+
+.sound-option-label {
+  color: #858585;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sound-toggle {
+  width: 100%;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 17px;
+
+  border: none;
+  border-radius: 30px;
+
+  background: #fafafa;
+  color: #77818b;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.sound-toggle:hover {
+  transform: translateY(-1px);
+}
+
+.sound-toggle.is-on {
+  background: #171717;
+  color: #ffffff;
+}
+
+.sound-toggle svg {
+  font-size: 17px;
+}
+
+/* =========================================
+   COLLAPSE BUTTON
+========================================= */
+
+.sound-close {
+  position: absolute;
+
+  top: 50%;
+  right: -13px;
+
+  transform: translateY(-50%);
+
+  width: 26px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 0 18px 18px 0;
+
+  background: #f1f2f3;
+  color: #171717;
+
+  font-size: 15px;
+
+  cursor: pointer;
+
+  transition: background 0.25s ease;
+}
+
+.sound-close:hover {
+  background: #e5e6e8;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 600px) {
+  .sound-widget {
+    left: 12px;
+  }
+
+  .sound-panel {
+    width: 168px;
+  }
+}
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .sound-widget *,
+  .sound-widget *::before,
+  .sound-widget *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

@@ -33,27 +33,26 @@ export default function HeroGuides() {
       className="pointer-events-none absolute inset-0 z-0 hidden overflow-hidden text-neutral-900/15 md:block"
     >
       {/* vertical rails */}
-      <div className="guide-v absolute inset-y-0 left-[50px] w-px bg-current" />
-      <div className="guide-v absolute inset-y-0 right-[50px] w-px bg-current" />
+      <div className="guide-v absolute inset-y-0 left-[var(--guide-x)] w-px bg-current" />
+      <div className="guide-v absolute inset-y-0 right-[var(--guide-x)] w-px bg-current" />
 
       {/* horizontal rules */}
       <div className="guide-h absolute inset-x-0 top-[64px] h-px bg-current" />
       <div className="guide-h absolute inset-x-0 top-[104px] border-t border-dashed border-current" />
 
-      {/* captions sitting between the rules */}
-      <span className="guide-label absolute left-[70px] top-[76px] text-xs text-neutral-500">
+      {/* captions */}
+      <span className="guide-label absolute left-[calc(var(--guide-x)_+_20px)] top-[76px] text-xs text-neutral-500">
         Not made for the moment.
       </span>
-      <span className="guide-label absolute right-[70px] top-[76px] text-xs text-neutral-500">
+      <span className="guide-label absolute right-[calc(var(--guide-x)_+_20px)] top-[76px] text-xs text-neutral-500">
         Built for what follows.
       </span>
 
-      {/* crosshairs at intersections + one floating */}
-      <Plus className="left-[50px] top-[64px]" size={16} />
-      <Plus className="right-[50px] top-[64px]" size={16} />
-      <Plus className="left-[50px] top-[104px]" size={16} />
-      <Plus className="right-[50px] top-[104px]" size={16} />
-      <Plus className="left-[48%] top-[275px]" size={32} />
+      {/* crosshairs */}
+      <Plus className="left-[var(--guide-x)] top-[64px]" size={16} />
+      <Plus className="right-[var(--guide-x)] top-[64px]" size={16} />
+      <Plus className="left-[var(--guide-x)] top-[104px]" size={16} />
+      <Plus className="right-[var(--guide-x)] top-[104px]" size={16} />
     </div>
   );
 }

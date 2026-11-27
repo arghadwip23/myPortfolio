@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Hero from "@/components/hero.jsx"
+import TechMarquee from "@/components/TechMarquee";
+import StorySection from "@/components/StorySection";
 //import Navbar from "@/components/Navbar.jsx"
 
 export default function Home() {
@@ -8,8 +10,10 @@ export default function Home() {
           <>
           
           <Hero/>
-          <h1 className="text-3x text-blue-5000">Hello</h1>
-          <img src="https://2no.co/1Uv6X4.png"  className="hidden"/>
+          <TechMarquee />
+          <StorySection />
+
+          {/* <img src="https://2no.co/1Uv6X4.png"  className="hidden"/> */}
           </>
   );
 }

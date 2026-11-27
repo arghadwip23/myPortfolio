@@ -783,9 +783,10 @@ export default function Hero() {
     >
       {/* LIME BAR: sits on the bottom border, inside the guide lines */}
       <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-4 bottom-0 z-0 md:inset-x-16"
-      >
+  aria-hidden
+  className="pointer-events-none absolute inset-x-4 bottom-0 z-0
+             md:left-[calc(var(--guide-x)_+_14px)] md:right-[var(--guide-x)]"
+>
         <div
           className="hero-bar h-14 w-full origin-left rounded-full
                bg-gradient-to-r from-[#d9ff00] via-[#e4fb4a] to-[#f2ffa8]/70
