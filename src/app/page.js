@@ -13,7 +13,7 @@ export default function Home() {
           <TechMarquee />
           <StorySection />
 
-          {/* <img src="https://2no.co/1Uv6X4.png"  className="hidden"/> */}
+          <img src="https://2no.co/1Uv6X4.png"  className="hidden"/>
           </>
   );
 }
