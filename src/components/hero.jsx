@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import HeroGuides from "./HeroGuide";
 import gsap from "gsap";
 
 // npm i three gsap
@@ -573,7 +574,7 @@ function createSilhouette(host, { onReady } = {}) {
       CONFIG.flakes,
       (i, pos, dir, seed, size) => {
         let v = 0, tries = 0, k = "";
-        for (;;) {
+        for (; ;) {
           v = pickVertex();
           const x = P[3 * v], y = P[3 * v + 1];
           const r = 0.35 + 0.65 * Math.min(Math.max((x + 0.05) / 0.3, 0), 1);
@@ -600,7 +601,7 @@ function createSilhouette(host, { onReady } = {}) {
       CONFIG.pecFlakes,
       (i, pos, dir, seed, size) => {
         let v = 0, tries = 0, k = "";
-        for (;;) {
+        for (; ;) {
           v = pickVertex();
           tries++;
           const x = P[3 * v], y = P[3 * v + 1];
@@ -743,21 +744,28 @@ export default function Hero() {
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // GSAP intro for the text
     const ctx = gsap.context(() => {
       const items = gsap.utils.toArray(".hero-anim");
+
       if (reduced) {
         gsap.set(items, { opacity: 1, y: 0 });
+        gsap.set(".hero-bar", { scaleX: 1, opacity: 1 });
       } else {
         gsap.fromTo(
           items,
           { y: 40, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.9, ease: "power3.out", stagger: 0.12, delay: 0.1 }
         );
+
+        // Lime bar grows from the left edge
+        gsap.fromTo(
+          ".hero-bar",
+          { scaleX: 0, opacity: 0, transformOrigin: "left center" },
+          { scaleX: 1, opacity: 1, duration: 1.2, ease: "power3.out", delay: 0.4 }
+        );
       }
     }, sectionRef);
 
-    // 3D silhouette (fades in once the model has loaded)
     const silhouette = createSilhouette(mountRef.current, {
       onReady: (canvas) =>
         gsap.to(canvas, { opacity: 1, duration: reduced ? 0 : 1.2, ease: "power2.out" }),
@@ -768,21 +776,32 @@ export default function Hero() {
       silhouette.dispose();
     };
   }, []);
-
   return (
     <section
       ref={sectionRef}
       className="relative flex min-h-svh w-full flex-col overflow-hidden bg-white text-neutral-950 md:flex-row md:p-5"
     >
+      {/* LIME BAR: sits on the bottom border, inside the guide lines */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-4 bottom-0 z-0 md:inset-x-16"
+      >
+        <div
+          className="hero-bar h-14 w-full origin-left rounded-full
+               bg-gradient-to-r from-[#d9ff00] via-[#e4fb4a] to-[#f2ffa8]/70
+               sm:h-16 md:h-24 md:w-[66%]"
+        />
+      </div>
+      <HeroGuides />
       {/* TEXT: top on mobile, left on md+ */}
-     <div className=" relative z-10 flex w-full flex-col items-center justify-center px-6 pb-6 pt-28 text-center md:w-1/2 md:items-start md:px-12 md:py-0 md:text-left lg:px-20 md:translate-x-[64px]">
+      <div className=" relative z-10 flex w-full flex-col items-center justify-center px-6 pb-6 pt-28 text-center md:w-1/2 md:items-start md:px-12 md:py-0 md:text-left lg:px-20 md:translate-x-[64px]">
         {/* <p className="hero-anim mb-4 flex items-center gap-3 text-xs font-medium uppercase tracking-[0.3em] text-neutral-500 opacity-0">
           <span className="h-px w-8 bg-[#d1d13d]" />
           {CONTENT.eyebrow}
         </p> */}
 
         <h1 className="hero-anim font-rajdhani text-4xl font-semibold leading-[1.05] tracking-tight opacity-0 sm:text-6xl lg:text-6xl">
-         Curiosity asks what's possible. Engineering makes it real.
+          Curiosity asks what's possible. Engineering makes it real.
         </h1>
 
         <p className="hero-anim mt-6 max-w-xl text-base text-neutral-400 opacity-0 sm:text-lg">
@@ -807,7 +826,7 @@ export default function Hero() {
 
       {/* 3D MODEL: below text on mobile, right on md+ */}
       <div className="relative min-h-[360px] w-full flex-1 md:w-1/2 md:flex-none">
-       <div ref={mountRef} className="absolute inset-0 md:translate-y-[110px]  md:scale-110" />
+        <div ref={mountRef} className="absolute inset-0 md:translate-y-[110px]  md:scale-110" />
       </div>
     </section>
   );
