@@ -783,10 +783,10 @@ export default function Hero() {
     >
       {/* LIME BAR: sits on the bottom border, inside the guide lines */}
       <div
-  aria-hidden
-  className="pointer-events-none absolute inset-x-4 bottom-0 z-0
+        aria-hidden
+        className="pointer-events-none absolute inset-x-4 bottom-0 z-0
              md:left-[calc(var(--guide-x)_+_14px)] md:right-[var(--guide-x)]"
->
+      >
         <div
           className="hero-bar h-14 w-full origin-left rounded-full
                bg-gradient-to-r from-[#d9ff00] via-[#e4fb4a] to-[#f2ffa8]/70
@@ -801,7 +801,7 @@ export default function Hero() {
           {CONTENT.eyebrow}
         </p> */}
 
-        <h1 className="hero-anim font-rajdhani text-4xl font-semibold leading-[1.05] tracking-tight opacity-0 sm:text-6xl lg:text-6xl">
+        <h1 className="hero-anim font-rajdhani text-4xl font-semibold leading-[1.05] bg-transparent tracking-tight opacity-0 sm:text-6xl lg:text-6xl">
           Curiosity asks what's possible. Engineering makes it real.
         </h1>
 

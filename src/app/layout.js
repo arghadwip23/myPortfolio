@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono, Rajdhani } from "next/font/google";
 import Navbar from "@/components/Navbar.jsx"
 import HoverSound from "@/components/HoverSound";
+import AsciiCursor from "@/components/AsciiCursor";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -33,6 +34,7 @@ export default function RootLayout({ children }) {
     >
       <body className="min-h-full flex flex-col">
         <Navbar/>
+        <AsciiCursor/>
         <HoverSound/>
         {children}
         </body>
